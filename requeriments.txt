@@ -1,0 +1,5 @@
+psutil
+gpiod
+libgpiod-dev
+luma.oled
+time
