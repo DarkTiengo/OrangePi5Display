@@ -14,6 +14,7 @@ git clone https://github.com/DarkTiengo/OrangePi5Display
 cd OrangePi5Display
 python3-pip install -r requeriments.txt
 sudo cp OrangeDisplay.py /usr/bin
+sudo cp display_datas.conf /usr/local/etc
 cd ..
 sudo rm -r OrangePi5Display
 
