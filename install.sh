@@ -12,7 +12,7 @@ echo 'SUBSYSTEM=="i2c-dev", GROUP="i2c", MODE="0666"' | sudo tee -a "$arquivo" >
 cd /tmp
 git clone https://github.com/DarkTiengo/OrangePi5Display.git
 cd OrangePi5Display
-python3-pip install -r requeriments.txt
+pip install -r requeriments.txt
 sudo cp OrangeDisplay.py /usr/bin
 sudo cp display_datas.conf /usr/local/etc
 cd ..
