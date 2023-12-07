@@ -3,20 +3,20 @@ sudo apt update && sudo apt install git swig python3-dev python3-setuptools pyth
 git clone --recursive https://github.com/orangepi-xunlong/wiringOP-Python -b next
 cd wiringOP-Python
 python3 generate-bindings.py > bindings.i
-python3 setup.py install
+sudo python3 setup.py install
 
-usermod $USER -aG i2c
+sudo usermod $USER -aG i2c
 
 cd /tmp
-git clone https://github.com/DarkTiengo/OrangePi5Display.git
+sudo git clone https://github.com/DarkTiengo/OrangePi5Display.git
 cd OrangePi5Display
-pip install -r requeriments.txt
-cp OrangeDisplay.py /usr/bin
-cp display_datas.conf /usr/local/etc
+sudo pip install -r requeriments.txt
+sudo cp OrangeDisplay.py /usr/bin
+sudo cp display_datas.conf /usr/local/etc
 cd ..
-rm -r OrangePi5Display
+sudo rm -r OrangePi5Display
 
-cat <<EOF | sudo tee /etc/systemd/system/OrangePi5Display.service
+sudo cat <<EOF | sudo tee /etc/systemd/system/OrangePi5Display.service
 [Unit]
 Description=Oled Display System Information
 After=multi-user.target
@@ -29,9 +29,9 @@ ExecStart=/usr/bin/python3 /usr/bin/OrangeDisplay.py
 WantedBy=multi-user.target
 EOF
 
-systemctl daemon-reload
-systemctl enable OrangePi5Display.service
-systemctl start OrangePi5Display.service
+sudo systemctl daemon-reload
+sudo systemctl enable OrangePi5Display.service
+sudo systemctl start OrangePi5Display.service
 
 cd -
 
