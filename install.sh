@@ -10,7 +10,7 @@ arquivo="/etc/udev/rules.d/99-rk-device-permissions.rules"
 echo 'SUBSYSTEM=="i2c-dev", GROUP="i2c", MODE="0666"' | sudo tee -a "$arquivo" > /dev/null
 
 cd /tmp
-git clone https://github.com/DarkTiengo/OrangePi5Display
+git clone https://github.com/DarkTiengo/OrangePi5Display.git
 cd OrangePi5Display
 python3-pip install -r requeriments.txt
 sudo cp OrangeDisplay.py /usr/bin
