@@ -13,8 +13,6 @@ cd OrangePi5Display
 sudo pip install -r requeriments.txt
 sudo cp OrangeDisplay.py /usr/bin
 sudo cp display_datas.conf /usr/local/etc
-cd ..
-sudo rm -r OrangePi5Display
 
 sudo cat <<EOF | sudo tee /etc/systemd/system/OrangePi5Display.service
 [Unit]
