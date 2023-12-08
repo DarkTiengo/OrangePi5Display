@@ -7,6 +7,7 @@ from time import sleep
 from luma.oled.device import ssd1306
 from luma.core.render import canvas
 from luma.core.interface.serial import i2c
+import mdstat
 
 device1 = None
 storage_main = None
@@ -15,8 +16,22 @@ device2 = None
 storage_data1 = None
 storage_data2 = None
 
+raid = None
+md = None
+ndevices = None
 
-
+def get_raid_data():
+    try:
+        raid_status = mdstat.parse()
+        if raid_status['devices'][md]['status']['non_degraded_disks'] == int(ndevices):
+            for dev in raid_status['devices'][md]['status']['synced']:
+                if dev is not True:
+                    return False
+            return True
+        else:
+            return False
+    except NotADirectoryError:
+        return False
 def get_display_data():
     try:
         with open("/usr/local/etc/display_datas.conf", "r") as file:
@@ -28,7 +43,6 @@ def get_display_data():
                 key, value = linha.split('=', 1)
                 datas[key] = value
             file.close()
-
         if 'port1' in datas:
             global device1
             global storage_main
@@ -44,8 +58,17 @@ def get_display_data():
             device2 = ssd1306(serial2,rotate=int(datas['rotation2']))
             if 'storage1' in datas:
                 storage_data1 = datas['storage1']
-            if 'storage2' in datas:
+            if 'storage2' in datas and 'health' not in datas:
                 storage_data2 = datas['storage2']
+        
+        if 'health' in datas:
+          global raid
+          global md
+          global ndevices
+          raid = True
+          md = datas['md']
+          ndevices = datas['number_of_disks']
+            
         file.close()
     except FileNotFoundError:
         raise FileNotFoundError("Conf File is not Found")
@@ -83,4 +106,10 @@ while True:
             if storage_data2 is not None:
                 draw.text((5,30),f"Arm 2: {psutil.disk_usage(storage_data2).used / (1024 ** 3):.1f}/"
                                 f"{psutil.disk_usage(storage_data2).total / (1024 ** 3):.1f} GB", fill="white")
+            if raid is not None:
+                health = get_raid_data() 
+                if health is True:
+                    draw.text((5,30),f"RAID OK",fill="white")
+                else:
+                    draw.text((5,30),f"RAID PROBLEMS",fill="white")
     sleep(1)
