@@ -126,8 +126,9 @@ while True:
             network_info = get_network_info()
             if network_info:
                 for interface, ip in network_info.items():
-                    if interface == "eth0":
+                    if interface == "eth0" or interface == "wlan0":
                         draw.text((5,40),f"IP: {ip}",fill="white")
+                        break
             else:
                 draw.text((5,40),f"IP: OFFLINE",fill="white")
             
