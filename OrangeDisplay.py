@@ -3,6 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import psutil
+import socket
 from time import sleep
 from luma.oled.device import ssd1306
 from luma.core.render import canvas
@@ -19,6 +20,16 @@ storage_data2 = None
 raid = None
 md = None
 ndevices = None
+
+def get_network_info():
+    conection = psutil.net_if_addrs()
+    net_info = {}
+    for interface_name, interface_addresses in conection.items():
+        for address in interface_addresses:
+            if address.family == socket.AF_INET:
+                if not address.address.startswith('127.'):
+                    net_info[interface_name] = address.address
+    return net_info if net_info else None
 
 def get_raid_data():
     try:
@@ -112,4 +123,12 @@ while True:
                     draw.text((5,30),f"RAID OK",fill="white")
                 else:
                     draw.text((5,30),f"RAID PROBLEMS",fill="white")
+            network_info = get_network_info()
+            if network_info:
+                for interface, ip in network_info.items():
+                    if interface == "eth0":
+                        draw.text((5,40),f"IP: {ip}",fill="white")
+            else:
+                draw.text((5,40),f"IP: OFFLINE",fill="white")
+            
     sleep(1)
